@@ -14,12 +14,13 @@ export class AuthService {
         return this.userRepository.signUp(authCredentialsDto);
     }
 
-    async signIn(authCredentialsDto: AuthCredentialsDto) {
+    async signIn(authCredentialsDto: AuthCredentialsDto): Promise<any> {
+        
         const username = await this.userRepository.validateUserPassword(authCredentialsDto)
 
-        console.log(username)
         if(!username){
-            throw new UnauthorizedException('Invalid credentials');
+            throw new UnauthorizedException('Invalid credentials')
         }
+
     }
 }
