@@ -1,6 +1,5 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { User } from "src/auth/user.entity";
-import { userInfo } from "os";
 
 @Entity()
 export class Task extends BaseEntity {

@@ -6,26 +6,27 @@ import { User } from "src/auth/user.entity"
 
 @EntityRepository(Task)
 export class TaskRepository extends Repository<Task> {
+  async getTasks(user: User): Promise<Task[]> {
+    const query = this.createQueryBuilder('task');
+    
+    query.where('task.user.id = :userId', { userId: user.id });
+    const tasks = await query.getMany();
 
-    async getTasks(): Promise<Task[]> {
-        const query = this.createQueryBuilder('task')
-        const tasks = await query.getMany()
+    return tasks;
+  }
 
-        return tasks
-    }
+  async createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
+    const { title, description } = createTaskDto;
 
-    async createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task>{
-        const { title, description } = createTaskDto
+    const task = new Task();
 
-        const task = new Task()
+    task.title = title;
+    task.description = description;
+    task.status = TaskStatus.OPEN;
+    task.user = user;
+    await task.save();
 
-        task.title = title
-        task.description = description
-        task.status = TaskStatus.OPEN
-        task.user = user
-        await task.save();
-
-        delete task.user;
-        return task
-    }
+    delete task.user;
+    return task;
+  }
 }

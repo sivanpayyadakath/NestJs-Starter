@@ -10,7 +10,7 @@ export class TaskStatusValidationPipe implements PipeTransform {
 
     transform(value: any) {
         if(this.allowedStatus.indexOf(value) === -1){
-            throw new BadRequestException(`invalid status ${value}`)
+            throw new   BadRequestException(`invalid status ${value}`)
         }
         return value
     }
