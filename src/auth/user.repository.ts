@@ -10,14 +10,13 @@ export class UserRepository extends Repository<User> {
     async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
         const { username, password } = authCredentialsDto;
         
-        const user = new User()
+        const user = this.create();
         user.username = username
         user.salt = await bcrypt.genSalt();
         user.password = await this.hashPassword(password, user.salt)
         try {
-            await user.save()        
+            await user.save()
         } catch (error) {
-            console.log(error.message)
             if(error.code === '23505') {
                 throw new ConflictException('dup name')
             } else {
